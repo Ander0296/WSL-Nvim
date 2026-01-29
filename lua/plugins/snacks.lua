@@ -121,13 +121,13 @@ return {
     Snacks.setup(opts)
 
   -- ✅ activar DIM siempre al iniciar Neovim
-  vim.api.nvim_create_autocmd("VimEnter", {
-    callback = function()
-      pcall(function()
-        Snacks.dim.enable()
-      end)
-    end,
-  })
+  -- vim.api.nvim_create_autocmd("VimEnter", {
+  --   callback = function()
+  --     pcall(function()
+  --       Snacks.dim.enable()
+  --     end)
+  --   end,
+  -- })
 
     -- helper: detectar si existe un plugin (sin LazyVim)
     local function has(mod)
@@ -315,15 +315,14 @@ return {
     { "<leader>/", function() Snacks.picker.grep() end, desc = "Buscar texto (directorio raíz)" },
     { "<leader>:", function() Snacks.picker.command_history() end, desc = "Historial de comandos" },
     { "<leader><space>", function() Snacks.picker.files() end, desc = "Buscar archivos (directorio raíz)" },
+
     -- Buscar archivos (find)
     { "<leader>fb", function() Snacks.picker.buffers() end, desc = "Buffers" },
     { "<leader>fB", function() Snacks.picker.buffers({ hidden = true, nofile = true }) end, desc = "Buffers (todos)" },
-
     { "<leader>fc", function() Snacks.picker.files({ cwd = vim.fn.stdpath("config") }) end, desc = "Buscar archivo de configuración" },
     { "<leader>ff", function() Snacks.picker.files() end, desc = "Buscar archivos (directorio raíz)" },
     { "<leader>fF", function() Snacks.picker.files({ cwd = (vim.uv or vim.loop).cwd() }) end, desc = "Buscar archivos (cwd)" },
     { "<leader>fg", function() Snacks.picker.git_files() end, desc = "Buscar archivos (git)" },
-
     { "<leader>fr", function() Snacks.picker.recent() end, desc = "Archivos recientes" },
     { "<leader>fR", function() Snacks.picker.recent({ filter = { cwd = true } }) end, desc = "Recientes (cwd)" },
     { "<leader>fp", function() Snacks.picker.projects() end, desc = "Proyectos" },
@@ -346,6 +345,7 @@ return {
     { "<leader>sp", function() Snacks.picker.lazy() end, desc = "Buscar especificación de plugin" },
     { "<leader>sw", function() Snacks.picker.grep({ search = vim.fn.expand("<cword>") }) end, desc = "Selección/palabra (raíz)", mode = { "n", "x" } },
     { "<leader>sW", function() Snacks.picker.grep({ search = vim.fn.expand("<cword>"), cwd = (vim.uv or vim.loop).cwd() }) end, desc = "Selección/palabra (cwd)", mode = { "n", "x" } },
+
     -- Buscar (search)
     { '<leader>s"', function() Snacks.picker.registers() end, desc = "Registros" },
     { "<leader>s/", function() Snacks.picker.search_history() end, desc = "Historial de búsqueda" },
