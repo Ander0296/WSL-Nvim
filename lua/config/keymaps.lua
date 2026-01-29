@@ -97,7 +97,6 @@ map("n", "[e", diagnostic_goto(false, "ERROR"), { desc = "Error anterior" })
 map("n", "]w", diagnostic_goto(true, "WARN"), { desc = "Siguiente advertencia" })
 map("n", "[w", diagnostic_goto(false, "WARN"), { desc = "Advertencia anterior" })
 
-
 -- lazygit / git
 local function git_root() local git = vim.fs.find(".git", { upward = true, path = vim.fn.getcwd() })[1]; return git and vim.fs.dirname(git) or vim.fn.getcwd() end
 if vim.fn.executable("lazygit") == 1 then
@@ -110,3 +109,40 @@ map("n", "<leader>gf", function() local ok, Snacks = pcall(require, "snacks"); i
 map("n", "<leader>gl", function() local ok, Snacks = pcall(require, "snacks"); if not ok then return vim.notify("snacks.nvim no está cargado", vim.log.levels.WARN) end; Snacks.picker.git_log({ cwd = git_root() }) end, { desc = "Git log (raíz del repo)" })
 map({ "n", "x" }, "<leader>gB", function() local ok, Snacks = pcall(require, "snacks"); if not ok then return vim.notify("snacks.nvim no está cargado", vim.log.levels.WARN) end; Snacks.gitbrowse() end, { desc = "Abrir en navegador (Git)" })
 map({ "n", "x" }, "<leader>gY", function() local ok, Snacks = pcall(require, "snacks"); if not ok then return vim.notify("snacks.nvim no está cargado", vim.log.levels.WARN) end; Snacks.gitbrowse({ open = function(url) vim.fn.setreg("+", url) end, notify = false }) end, { desc = "Copiar enlace (Git)" })
+
+-- resaltados bajo el cursor
+map("n", "<leader>ui", vim.show_pos, { desc = "Inspeccionar posición (resaltados)" })
+map("n", "<leader>uI", function() vim.treesitter.inspect_tree(); vim.api.nvim_input("I") end, { desc = "Inspeccionar árbol (Tree-sitter)" })
+
+-- terminal flotante
+local function project_root() local markers = { ".git", "pyproject.toml", "package.json", "go.mod", "Cargo.toml", "pom.xml", "build.gradle", "Makefile" }; local found = vim.fs.find(markers, { upward = true, path = vim.fn.getcwd() })[1]; return found and vim.fs.dirname(found) or vim.fn.getcwd() end
+map("n", "<leader>fT", function() local ok, Snacks = pcall(require, "snacks"); if not ok then return vim.notify("snacks.nvim no está cargado", vim.log.levels.WARN) end; Snacks.terminal() end, { desc = "Terminal (directorio actual)" })
+map("n", "<leader>ft", function() local ok, Snacks = pcall(require, "snacks"); if not ok then return vim.notify("snacks.nvim no está cargado", vim.log.levels.WARN) end; Snacks.terminal(nil, { cwd = project_root() }) end, { desc = "Terminal (raíz del proyecto)" })
+map({ "n", "t" }, "<c-/>", function() local ok, Snacks = pcall(require, "snacks"); if not ok then return vim.notify("snacks.nvim no está cargado", vim.log.levels.WARN) end; Snacks.terminal(nil, { cwd = project_root() }) end, { desc = "Terminal (raíz del proyecto)" })
+map({ "n", "t" }, "<c-_>", function() local ok, Snacks = pcall(require, "snacks"); if not ok then return vim.notify("snacks.nvim no está cargado", vim.log.levels.WARN) end; Snacks.terminal(nil, { cwd = project_root() }) end, { desc = "which_key_ignore" })
+
+-- ventanas
+map("n", "<leader>-", "<C-W>s", { desc = "Dividir ventana abajo", remap = true })
+map("n", "<leader>|", "<C-W>v", { desc = "Dividir ventana a la derecha", remap = true })
+map("n", "<leader>wd", "<C-W>c", { desc = "Cerrar ventana", remap = true })
+
+-- pestañas
+map("n", "<leader><tab>l", "<cmd>tablast<cr>", { desc = "Última pestaña" })
+map("n", "<leader><tab>o", "<cmd>tabonly<cr>", { desc = "Cerrar otras pestañas" })
+map("n", "<leader><tab>f", "<cmd>tabfirst<cr>", { desc = "Primera pestaña" })
+map("n", "<leader><tab><tab>", "<cmd>tabnew<cr>", { desc = "Nueva pestaña" })
+map("n", "<leader><tab>]", "<cmd>tabnext<cr>", { desc = "Siguiente pestaña" })
+map("n", "<leader><tab>d", "<cmd>tabclose<cr>", { desc = "Cerrar pestaña" })
+map("n", "<leader><tab>[", "<cmd>tabprevious<cr>", { desc = "Pestaña anterior" })
+map("n", "<A-l>", "<cmd>tabn<CR>", { desc = "Ir a la siguiente pestaña" })
+map("n", "<A-h>", "<cmd>tabp<CR>", { desc = "Ir a la pestaña anterior" })
+
+-- Siempre verás el resultado en el centro de tu pantalla.
+map("n", "n", "nzzzv", { desc = "Ir al siguiente resultado y centrar el cursor" })
+map("n", "N", "Nzzzv", { desc = "Ir al resultado anterior y centrar el cursor" })
+
+-- Desactivar flechas (opcional)
+map({ "n", "i", "v" }, "<Up>", "<Nop>")
+map({ "n", "i", "v" }, "<Down>", "<Nop>")
+map({ "n", "i", "v" }, "<Left>", "<Nop>")
+map({ "n", "i", "v" }, "<Right>", "<Nop>")

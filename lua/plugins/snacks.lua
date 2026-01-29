@@ -274,6 +274,7 @@ return {
     T.profiler_highlights({ name = "󰸌 Profiler: resaltados" }):map("<leader>dph")
     T.dim({ name = "󰌶 Oscurecer código inactivo" }):map("<leader>uod")
     T.zen({ name = "🧘 Modo sin distracciones" }):map("<leader>uz")
+    T.zoom({ name = "Alternar zoom de ventana" }):map("<leader>uZ")
     if vim.lsp.inlay_hint then
       T.inlay_hints({ name = "󰛨 Inlay hints (pistas en línea)" }):map("<leader>uh")
     end
@@ -293,6 +294,16 @@ return {
       desc = "Historial de notificaciones",
     },
     { "<leader>un", function() Snacks.notifier.hide() end, desc = "Cerrar todas las notificaciones" },
+
+    -- Explorador (recomendado)
+    {
+      "<leader>ee",
+      function()
+        Snacks.explorer()
+      end,
+      desc = "Explorador de archivos",
+      mode = "n",
+    },
 
     -- Scratch / profiler
     { "<leader>.", function() Snacks.scratch() end, desc = "Alternar buffer Scratch" },
